@@ -43,10 +43,14 @@ a {
   border-bottom: 1px solid #eee;
   cursor: pointer;
 }
-
-#seznam-kanalov div:hover {
+#seznam-uporabnikov div {
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+#seznam-kanalov div:hover,#seznam-uporabnikov div:hover {
   background-color: #ddd;
 }
+
 
 #poslji-sporocilo {
   width: 700px;
