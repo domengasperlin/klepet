@@ -11,7 +11,9 @@ function divElementEnostavniTekst(sporocilo) {
 function divElementHtmlTekst(sporocilo) {
   return $('<div></div>').html('<i>' + sporocilo + '</i>');
 }
-
+function divElementHtmlSlika(tekst) {
+ return $('<div></div>').html('<img src="' + tekst + '" style="padding-left:20px;" width="200px" >');
+}
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
@@ -23,9 +25,19 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
+    
     sporocilo = filtirirajVulgarneBesede(sporocilo);
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    
+      if (/https?:\/\/.*\.(?:png|jpg|gif)/.test(sporocilo)) { 
+      var myString = sporocilo;
+      var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
+      var match = myRegexp.exec(myString);
+      $('#sporocila').append(divElementHtmlSlika(match));
+        
+      }
+    
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
 
