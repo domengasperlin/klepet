@@ -76,8 +76,16 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    
   });
-  
+  socket.on('dregljaj',function() {
+     $('#vsebina').jrumble();
+    klepetApp.procesirajUkaz('/dregljaj ' + $(this).text());
+     $('#vsebina').trigger('startRumble');
+      window.setTimeout(function() {
+      $('#vsebina').trigger('stopRumble');
+      },1500);
+  })
   socket.on('kanali', function(kanali) {
     $('#seznam-kanalov').empty();
 
