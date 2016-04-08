@@ -80,7 +80,7 @@ $(document).ready(function() {
   });
   socket.on('dregljaj',function() {
      $('#vsebina').jrumble();
-    klepetApp.procesirajUkaz('/dregljaj ' + $(this).text());
+    //klepetApp.procesirajUkaz('/dregljaj ' + $(this).text());
      $('#vsebina').trigger('startRumble');
       window.setTimeout(function() {
       $('#vsebina').trigger('stopRumble');
