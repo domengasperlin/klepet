@@ -1,14 +1,19 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
+  var jeSlika = (/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g).test(sporocilo);
+    
+  if (jeSmesko || jeSlika) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-    return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  }else if(/https?:\/\/.*\.(?:png|jpg|gif)/.test(sporocilo)){
-   sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-   var myString = sporocilo;
+  console.log("dobar");
+    var myString = sporocilo;
       var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
       var match = myRegexp.exec(myString);
-    return $('<img width="200px" style="margin-left:20px;" src="'+match+ '" >').html(sporocilo);
+    //  sporocilo = sporocilo.replace(/https?:\/\/.*\.(?:png|jpg|gif)/,'"$&" width="200px" >');
+    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$&<br><img src="$&" width="200px" style="margin-left:20px" ><br>')
+    
+ //   sporocilo = sporocilo.replace(/&gt;/,'>');
+      console.log(sporocilo);
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
   }
   else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -20,7 +25,7 @@ function divElementHtmlTekst(sporocilo) {
   return $('<div></div>').html('<i>' + sporocilo + '</i>');
 }
 function divElementHtmlSlika(tekst) {
- return $('<div></div>').html('<img src="' + tekst + '" style="padding-left:20px;" width="200px" >');
+ return $('<div></div>').html('<img src="' + tekst + '" style="padding-left:20px;');
 }
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
@@ -36,9 +41,9 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     
     sporocilo = filtirirajVulgarneBesede(sporocilo);
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-    sporocilo = sporocilo.replace(/https?:\/\/.*\.(?:png|jpg|gif)/, '<img src="$&" width="200px" style="margin-left:20px" >');
+    //sporocilo = sporocilo.replace(/https?:\/\/.*\.(?:png|jpg|gif)/, '<img src="$&" width="200px" style="margin-left:20px" >');
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-    
+  
     /*  if (/https?:\/\/.*\.(?:png|jpg|gif)/.test(sporocilo)) { 
       var myString = sporocilo;
       var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
