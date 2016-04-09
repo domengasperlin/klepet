@@ -4,7 +4,7 @@ function divElementEnostavniTekst(sporocilo) {
  // var youtubeS = (sporocilo.slice(0,32) == "https://www.youtube.com/watch?v=");
   if (jeSmesko || youtubeS) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-    sporocilo = sporocilo.replace(/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g, '$&<br><div style="padding-left:20px;"><iframe src="https://www.youtube.com/embed/$1" allowfullscreen></iframe></div>');
+    sporocilo = sporocilo.replace(/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g, '$&<br><div style="padding-left:20px;"><iframe width="200px" height="150px" src="https://www.youtube.com/embed/$1" allowfullscreen></iframe></div>');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   }
   else {
