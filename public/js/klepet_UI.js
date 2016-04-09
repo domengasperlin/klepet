@@ -3,12 +3,11 @@ function divElementEnostavniTekst(sporocilo) {
   var jeSlika = (/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g).test(sporocilo);
     
   if (jeSmesko || jeSlika) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-    var myString = sporocilo;
-      var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
-      var match = myRegexp.exec(myString);
-    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$&<br><img src="$&" width="200px" style="margin-left:20px" ><br>')
-
+    if (jeSmesko) {
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/&lt;img/g, '<img').replace(/png\' \/&gt;/g, 'png\' />');
+    }else {
+    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$&<br><img src="$&" width="200px" style="margin-left:20px" /><br>')
+}
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   }
   else {
