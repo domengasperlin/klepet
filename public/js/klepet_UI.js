@@ -4,15 +4,11 @@ function divElementEnostavniTekst(sporocilo) {
     
   if (jeSmesko || jeSlika) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
-  console.log("dobar");
     var myString = sporocilo;
       var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
       var match = myRegexp.exec(myString);
-    //  sporocilo = sporocilo.replace(/https?:\/\/.*\.(?:png|jpg|gif)/,'"$&" width="200px" >');
     sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$&<br><img src="$&" width="200px" style="margin-left:20px" ><br>')
-    
- //   sporocilo = sporocilo.replace(/&gt;/,'>');
-      console.log(sporocilo);
+
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   }
   else {
