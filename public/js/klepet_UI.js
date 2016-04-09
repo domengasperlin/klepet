@@ -1,9 +1,25 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
+ // var youtubeS = sporocilo.search(/https:\/\/www\.youtube\.com\/watch\?v=(.{1,11})/g) > -1;
+
+  var youtubeS = ((/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g).test(sporocilo));
+ // var youtubeS = (sporocilo.slice(0,32) == "https://www.youtube.com/watch?v=");
+  if (jeSmesko || youtubeS) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    sporocilo = sporocilo.replace(/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g, '$&<br><div style="padding-left:20px;"><iframe src="https://www.youtube.com/embed/$1" allowfullscreen></iframe></div>');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  }
+/*
+  else if(sporocilo.slice(0,32) == "https://www.youtube.com/watch?v=") {
+     var link = sporocilo;
+     link = link.replace(/\."|watch\?v=/,"embed/");
+     alert(link);
+     sporocilo = link;
+  //   link = link.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+      return $('<div><iframe width="200px" style="margin-left:20px;" src="'+link+ '" ></iframe></div>');
+  }
+  */
+  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
@@ -23,7 +39,14 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
+   // alert(sporocilo)
+   
+   //  sporocilo = sporocilo.replace(/\."|watch\?v=/,"embed/");
+    //sporocilo = sporocilo.replace(sporocilo, '<iframe src="$&" width="200px" height="150px" allowfullscreen></iframe>');
+     //sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    
     sporocilo = filtirirajVulgarneBesede(sporocilo);
+
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
