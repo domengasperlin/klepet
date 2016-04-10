@@ -1,17 +1,30 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+  var jeSlika = (/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g).test(sporocilo);
+    
+  if (jeSmesko || jeSlika) {
+ 
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/&lt;img/g, '<img').replace(/png\' \/&gt;/g, 'png\' />');
+    var reMatch = /OIS\/gradivo\/.+(?:png'|jpg'|gif')/;
+    var match = reMatch.exec(sporocilo);//   OIS/gradivo/smiley.png'
+    sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\/OIS\/gradivo\/.+(?:png'|jpg'|gif')/,'http://sandbox.lavbic.net/teaching/')// sandbox.lavbic.net/teaching/OIS/gradivo/smiley.png  
+    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$& <br><img src="$&" width="200px" style="padding-left:20px" /><br>')
+    sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\//,"http://sandbox.lavbic.net/teaching/"+match+"'");
+    console.log("po tretjem replacu "+sporocilo );
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  }
+  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
+
 }
 
 function divElementHtmlTekst(sporocilo) {
   return $('<div></div>').html('<i>' + sporocilo + '</i>');
 }
-
+function divElementHtmlSlika(tekst) {
+ return $('<div></div>').html('<img src="' + tekst + '" style="padding-left:20px;');
+}
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
@@ -23,9 +36,11 @@ function procesirajVnosUporabnika(klepetApp, socket) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
   } else {
+    
     sporocilo = filtirirajVulgarneBesede(sporocilo);
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
 
