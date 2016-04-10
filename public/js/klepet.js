@@ -16,11 +16,15 @@ Klepet.prototype.spremeniKanal = function(kanal) {
   });
 };
 
+
 Klepet.prototype.procesirajUkaz = function(ukaz) {
   var besede = ukaz.split(' ');
   ukaz = besede[0].substring(1, besede[0].length).toLowerCase();
+  console.log(besede.length);
   var sporocilo = false;
-
+  if (besede.length == 1) {
+      ukaz += " ";
+      }
   switch(ukaz) {
     case 'pridruzitev':
       besede.shift();
@@ -31,6 +35,11 @@ Klepet.prototype.procesirajUkaz = function(ukaz) {
       besede.shift();
       var vzdevek = besede.join(' ');
       this.socket.emit('vzdevekSpremembaZahteva', vzdevek);
+      break;
+    case 'dregljaj':
+      besede.shift();
+      var dregljaj = besede.join(' ');
+      this.socket.emit('dregljaj',{vzdevek: dregljaj});
       break;
     case 'zasebno':
       besede.shift();
@@ -47,6 +56,5 @@ Klepet.prototype.procesirajUkaz = function(ukaz) {
       sporocilo = 'Neznan ukaz.';
       break;
   };
-
   return sporocilo;
 };
