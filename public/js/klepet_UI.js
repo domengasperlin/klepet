@@ -8,7 +8,7 @@ function divElementEnostavniTekst(sporocilo) {
     var reMatch = /OIS\/gradivo\/.+(?:png'|jpg'|gif')/;
     var match = reMatch.exec(sporocilo);//   OIS/gradivo/smiley.png'
     sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\/OIS\/gradivo\/.+(?:png'|jpg'|gif')/,'http://sandbox.lavbic.net/teaching/')// sandbox.lavbic.net/teaching/OIS/gradivo/smiley.png  
-    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$& <br><img src="$&" width="200px" style="margin-left:20px" /><br>')
+    sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$& <br><img src="$&" width="200px" style="padding-left:20px" /><br>')
     sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\//,"http://sandbox.lavbic.net/teaching/"+match+"'");
     console.log("po tretjem replacu "+sporocilo );
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
@@ -39,16 +39,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     
     sporocilo = filtirirajVulgarneBesede(sporocilo);
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
-    //sporocilo = sporocilo.replace(/https?:\/\/.*\.(?:png|jpg|gif)/, '<img src="$&" width="200px" style="margin-left:20px" >');
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-  
-    /*  if (/https?:\/\/.*\.(?:png|jpg|gif)/.test(sporocilo)) { 
-      var myString = sporocilo;
-      var myRegexp = /https?:\/\/.*\.(?:png|jpg|gif)/;
-      var match = myRegexp.exec(myString);
-      $('#sporocila').append(divElementHtmlSlika(match));
-        
-      }*/
     
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
