@@ -1,16 +1,15 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   var jeSlika = (/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g).test(sporocilo);
-    
-  if (jeSmesko || jeSlika) {
- 
+  var youtubeS = ((/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g).test(sporocilo));  
+  if (jeSmesko || jeSlika || youtubeS) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/&lt;img/g, '<img').replace(/png\' \/&gt;/g, 'png\' />');
+    sporocilo = sporocilo.replace(/https:\/\/www\.youtube\.com\/watch\?v=(.{11})/g, '$&<br><div style="padding-left:20px;"><iframe width="200px" height="150px" src="https://www.youtube.com/embed/$1" allowfullscreen></iframe></div>');
     var reMatch = /OIS\/gradivo\/.+(?:png'|jpg'|gif')/;
     var match = reMatch.exec(sporocilo);//   OIS/gradivo/smiley.png'
     sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\/OIS\/gradivo\/.+(?:png'|jpg'|gif')/,'http://sandbox.lavbic.net/teaching/')// sandbox.lavbic.net/teaching/OIS/gradivo/smiley.png  
     sporocilo = sporocilo.replace(/(http(s?):)([/|.|\w|\S])*\.(?:jpg|gif|png)/g,'$& <br><img src="$&" width="200px" style="padding-left:20px" /><br>')
     sporocilo = sporocilo.replace(/http:\/\/sandbox.lavbic.net\/teaching\//,"http://sandbox.lavbic.net/teaching/"+match+"'");
-    console.log("po tretjem replacu "+sporocilo );
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   }
   else {
@@ -38,6 +37,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
   } else {
     
     sporocilo = filtirirajVulgarneBesede(sporocilo);
+
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     
